@@ -1,0 +1,51 @@
+Abrir a pasta onde será criada a API que estabelece conexão com banco de dados. 
+
+1 - Console - Digitar comando dotnet new webapi;
+
+2 - Criar entidade que representará uma tabela;
+
+3 - Instalar pacotes no console.
+    - dotnet add package Microsoft.EntityFrameworkCore --version 8.0.8
+    - dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.8
+    - dotnet add package Microsoft.EntityFrameworkCore.Design --version 8.0.8
+
+4 - Criar contexto para representar o banco. 
+    - Criar um construtor.
+    - Criar DbSet para representar a tabela dentro do contexto;
+    - Fazer com que o context herde de DbContext;
+
+5 - Configurar conexão no appsetings.Development.json
+    - CONEXÃO PADRÃO LOCAL HOST - "ConnectionStrings": {
+    "ConexaoPadrao": "Server=localhost\\sqlexpress; Initial Catalog=Agenda; Integrated Security=True"}
+
+6 - Configurar conexão no Program.cs.
+    - Não esquecer do using Projeto.Context;
+    - Não esquecer do using Microsoft.EntityFrameworkCore;
+    - builder.Services.AddDbContext<AgendaContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao")));
+
+7 - Console - Criar uma tabela e precisamos pedir para o entitie criar de maneira antecipada.
+    - dotnet-ef migrations add CriacaoTabelaContato
+    - Criamos a migrations da tabela de acordo com a classe entidade.
+    - Agora precisamos fazer um update da tabela ao banco de dados.
+    - Console - dotnet-ef database update
+
+8 - Criar uma nova Controller.
+    - Acrescentar os atributos em cima da classe. [ApiControler] e [Route("[controller]")].
+    - Fazer com que a classe herde de ControllerBase.
+    - Criar construtor.
+    - Criar o método Create.
+    - Atributo no método [HttpPost] - Para enviar uma informação.
+
+9 - Caso de erro na execução do dotnet watch run - Exclua o arquivo .sln, crie um novo pelo terminarl com os comandos abaixo.
+    - dotnet new sln
+    - dotnet sln add C:\Projetos\Modulo_Api\Modulo_Api.csproj
+
+10 - Api criada e integrada com o banco de dados.
+
+Explicação verbos Http - Relacionado com ações.
+    - Post - Create, criando ou enviando uma nova informação da api.
+    - Get - Read, obter alguma informação, exemplo, obter contato por Id, por nome, sempre relacionado com retorno de informação.
+    - Put - update, Atualizar ou alterar uma informação já existente.
+    - Patch - Atualizações e modificações, bem relacionado com o put, a diferença é que o path podemos passar uma informação parcial.
+    - Delete - Delete - Deletar algum recurso existente.
